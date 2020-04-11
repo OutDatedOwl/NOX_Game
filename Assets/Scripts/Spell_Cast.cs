@@ -12,27 +12,17 @@ public class Spell_Cast : MonoBehaviour
     [SerializeField] List<Mana_Drain_Particles> mana_Pillar_List = new List<Mana_Drain_Particles>();
     Mana_Drain_Particles mana_Drain_Object;
     GameObject deathRay, fireball;
-    //Vector3 manaDrainDirection;
-    //public float speed;
-    //float singleStep;
-    //ParticleSystem manaDrain_Particles;
-    //List<Spell_Methods> spells = new List<Spell_Methods>();
-    //Spell_Methods spell = delegate { };
 
     private void Start()
     {
-        hash_Browns.Add("S_DeathRay", S_DeathRay);
+        hash_Browns.Add("S_DeathRay", S_DeathRay); // Need To Add All Spells In CVS file
         hash_Browns.Add("S_Fireball", S_FireBall);
         hash_Browns.Add("S_DrainMana", S_ManaDrain);
-        //spells.Add(S_DeathRay);
-        //spells[0]("d");
-        //hash_Browns.Add("DeathRay", 0);
-        //spell = FindSpell;
     }
 
     private void Update()
     {
-        foreach (Mana_Drain_Particles manaPillar in mana_Pillar_List)
+        foreach (Mana_Drain_Particles manaPillar in mana_Pillar_List) // ManaPillarFinder
         {
             if (Vector3.Distance(manaPillar.transform.position, transform.position) < 30f)
             {
@@ -43,7 +33,7 @@ public class Spell_Cast : MonoBehaviour
         }
     }
 
-    public void FindSpell(string spell_Name, Vector3 spell_Direction)
+    public void FindSpell(string spell_Name, Vector3 spell_Direction) // Take In Spell_ID from UI_Manager, Find Method Of That Spell_ID -> Cast That Spell
     {
         if (hash_Browns.ContainsKey(spell_Name))
         {
@@ -51,8 +41,6 @@ public class Spell_Cast : MonoBehaviour
         }
         else
             return;
-        //hash_Browns.ContainsKey(spell_Name);
-        //spell = spell_Name;
     }
 
     private void S_DeathRay(string spell_ID, Vector3 spell_Direction)
@@ -76,11 +64,6 @@ public class Spell_Cast : MonoBehaviour
         {
             mana_Drain_Object.Drain_Dat_Mana_Son();
         }
-        //manaDrainDirection = transform.position - manaDrain_Particles.transform.position;
-        //manaDrain_Particles.transform.rotation = Quaternion.LookRotation(manaDrainDirection);
-        //manaDrain_Particles.Play();
-        //manaDrainPillars_Particles.loop;
-        //manaDrainPillars.SetActive(true);
     }
 
     private void OnDrawGizmos()

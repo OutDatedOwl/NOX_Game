@@ -20,10 +20,10 @@ public class UI_Manager : MonoBehaviour
     {
         audio_Source = GetComponent<AudioSource>();
     }
-
+    // Take NumericalSpellChantSequence i.e. "0,1,1", Spell Name, Direction Of Caster Is Facing
     public void Parse_Spell_Sequence(string gestureSequence, string spell_ID_Import, Vector3 spell_Direction_Import)
     {
-        spell_Chant_Sequence = gestureSequence.Split(',');
+        spell_Chant_Sequence = gestureSequence.Split(','); // Split NumSpellChant into individual chars
         testing = new int[spell_Chant_Sequence.Length];
         for (int i = 0; i < spell_Chant_Sequence.Length; i++)
         {
@@ -34,8 +34,17 @@ public class UI_Manager : MonoBehaviour
         StartCoroutine(MagicGestures(testing[0]));
     }
 
-    IEnumerator MagicGestures(int gestureSequence)
+    IEnumerator MagicGestures(int gestureSequence) // Play Sound, Image of that char
     {
+        /* UN 0
+         * IN 1
+         * CHA 2
+         * DO 3
+         * ZO 4 
+         * RO 5
+         * ET 6
+         * KA 7
+         */
         switch(gestureSequence) 
         {
             case 0:

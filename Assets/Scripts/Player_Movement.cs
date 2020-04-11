@@ -5,8 +5,7 @@ using UnityEngine.AI;
 
 public class Player_Movement : MonoBehaviour
 {
-    //[SerializeField] Game_Manager audio_Manager;
-    [SerializeField] GameObject deathRayParticles;//, fireBallParticles;
+    [SerializeField] GameObject deathRayParticles;
     [SerializeField] Transform hands;
     [SerializeField] UI_Manager UI;
     GameObject deathRay, fireball;
@@ -43,22 +42,15 @@ public class Player_Movement : MonoBehaviour
 
         player.Move(direction);
     }
-
+    // Need Actionbar
     void Cast_Spell_1()
     {
-        UI.Parse_Spell_Sequence("3,3", "S_DeathRay", shootDirection);
-        /*audio_Manager.PlaySound(0);
-        for (int i = 0; i < 10; i++)
-        {
-            deathRay = Instantiate(deathRayParticles, hands.position + Vector3.up, Quaternion.identity);
-            deathRay.transform.position = deathRay.transform.position + shootDirection * i / 10;
-        }*/
+        UI.Parse_Spell_Sequence("3,3", "S_DeathRay", shootDirection); // SpellChantSequence, Name Of Spell, Direction
     }
 
     void Cast_Spell_2()
     {
         UI.Parse_Spell_Sequence("4,4,0", "S_Fireball", shootDirection);
-        //fireball = Instantiate(fireBallParticles, hands.position + Vector3.up, Quaternion.LookRotation(transform.forward));
     }
 
     void Cast_Spell_3()
@@ -90,17 +82,14 @@ public class Player_Movement : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            //UI.Parse_Spell_Sequence("3,3", "S_Death_Ray", shootDirection);
             Cast_Spell_1();
         }
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            //UI.Parse_Spell_Sequence("4,4,0", "Fireball");
             Cast_Spell_2();
         }
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
-            //UI.Parse_Spell_Sequence("4,4,0", "Fireball");
             Cast_Spell_3();
         }
     }
@@ -112,13 +101,10 @@ public class Player_Movement : MonoBehaviour
         {
             if (!Input.GetMouseButton(0))
             {
-                // Determine which direction to rotate towards
                 targetDirection = new Vector3(hit.point.x - transform.position.x, 0, hit.point.z - transform.position.z);
 
-                // The step size is equal to speed times frame time.
                 singleStep = speed * Time.deltaTime;
 
-                // Rotate the forward vector towards the target direction by one step
                 newDirection = Vector3.RotateTowards(transform.forward, targetDirection, singleStep, 0.0f);
                 transform.rotation = Quaternion.LookRotation(newDirection);
                 anim.SetBool("RUN", false);
