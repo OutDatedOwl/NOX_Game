@@ -42,30 +42,39 @@ public class Player_Movement : MonoBehaviour
 
         player.Move(direction);
     }
-    // Need Actionbar
+    /* Need Actionbar
+    * UN 0 North
+    * IN 1 NorthEast
+    * CHA 2 East
+    * DO 3 SouthEast
+    * ZO 4 South
+    * RO 5 SouthWest
+    * ET 6 West
+    * KA 7 NorthWest
+    */
     void Cast_Spell_1()
     {
-        UI.Parse_Spell_Sequence("3,3", "S_DeathRay", shootDirection); // SpellChantSequence, Name Of Spell, Direction
+        UI.Parse_Spell_Sequence("3,3", "S_DeathRay", shootDirection, hit.point); // SpellChantSequence, Name Of Spell, Direction
     }
 
     void Cast_Spell_2()
     {
-        UI.Parse_Spell_Sequence("4,4,0", "S_Fireball", shootDirection);
+        UI.Parse_Spell_Sequence("4,4,0", "S_Fireball", shootDirection, hit.point);
     }
 
     void Cast_Spell_3()
     {
-        UI.Parse_Spell_Sequence("0,7,4,2", "S_DrainMana", shootDirection);
+        UI.Parse_Spell_Sequence("0,7,4,1", "S_DrainMana", shootDirection, hit.point);
     }
 
     void Cast_Spell_4()
     {
-
+        UI.Parse_Spell_Sequence("4,0,6,2", "S_TeleportToTarget", shootDirection, hit.point);
     }
 
     void Cast_Spell_5()
     {
-
+        UI.Parse_Spell_Sequence("2,6,0", "S_Blink", shootDirection, hit.point);
     }
 
     private void Update()
@@ -91,6 +100,14 @@ public class Player_Movement : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
             Cast_Spell_3();
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            Cast_Spell_4();
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha5))
+        {
+            Cast_Spell_5();
         }
     }
 

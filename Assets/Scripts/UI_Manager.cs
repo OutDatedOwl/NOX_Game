@@ -14,14 +14,14 @@ public class UI_Manager : MonoBehaviour
     int counter = 0;
     AudioSource audio_Source;
     string spell_ID;
-    Vector3 spell_Direction;
+    Vector3 spell_Direction, mouseLocation;
 
     private void Start()
     {
         audio_Source = GetComponent<AudioSource>();
     }
     // Take NumericalSpellChantSequence i.e. "0,1,1", Spell Name, Direction Of Caster Is Facing
-    public void Parse_Spell_Sequence(string gestureSequence, string spell_ID_Import, Vector3 spell_Direction_Import)
+    public void Parse_Spell_Sequence(string gestureSequence, string spell_ID_Import, Vector3 spell_Direction_Import, Vector3 mouseLocation_Import)
     {
         spell_Chant_Sequence = gestureSequence.Split(','); // Split NumSpellChant into individual chars
         testing = new int[spell_Chant_Sequence.Length];
@@ -31,19 +31,20 @@ public class UI_Manager : MonoBehaviour
         }
         spell_ID = spell_ID_Import;
         spell_Direction = spell_Direction_Import;
+        mouseLocation = new Vector3(mouseLocation_Import.x, mouseLocation_Import.y + 8.1f, mouseLocation_Import.z);
         StartCoroutine(MagicGestures(testing[0]));
     }
 
     IEnumerator MagicGestures(int gestureSequence) // Play Sound, Image of that char
     {
-        /* UN 0
-         * IN 1
-         * CHA 2
-         * DO 3
-         * ZO 4 
-         * RO 5
-         * ET 6
-         * KA 7
+        /* UN 0 North
+         * IN 1 NorthEast
+         * CHA 2 East
+         * DO 3 SouthEast
+         * ZO 4 South
+         * RO 5 SouthWest
+         * ET 6 West
+         * KA 7 NorthWest
          */
         switch(gestureSequence) 
         {
@@ -61,7 +62,7 @@ public class UI_Manager : MonoBehaviour
                 }
                 else
                 {
-                    spell_Cast.FindSpell(spell_ID, spell_Direction);
+                    spell_Cast.FindSpell(spell_ID, spell_Direction, mouseLocation);
                     counter = 0;
                     break;
                 }
@@ -80,7 +81,7 @@ public class UI_Manager : MonoBehaviour
                 }
                 else
                 {
-                    spell_Cast.FindSpell(spell_ID, spell_Direction);
+                    spell_Cast.FindSpell(spell_ID, spell_Direction, mouseLocation);
                     counter = 0;
                     break;
                 }
@@ -99,7 +100,7 @@ public class UI_Manager : MonoBehaviour
                 }
                 else
                 {
-                    spell_Cast.FindSpell(spell_ID, spell_Direction);
+                    spell_Cast.FindSpell(spell_ID, spell_Direction, mouseLocation);
                     counter = 0;
                     break;
                 }
@@ -118,7 +119,7 @@ public class UI_Manager : MonoBehaviour
                 }
                 else
                 {
-                    spell_Cast.FindSpell(spell_ID, spell_Direction);
+                    spell_Cast.FindSpell(spell_ID, spell_Direction, mouseLocation);
                     counter = 0;
                     break;
                 }
@@ -137,7 +138,7 @@ public class UI_Manager : MonoBehaviour
                 }
                 else
                 {
-                    spell_Cast.FindSpell(spell_ID, spell_Direction);
+                    spell_Cast.FindSpell(spell_ID, spell_Direction, mouseLocation);
                     counter = 0;
                     break;
                 }
@@ -156,7 +157,7 @@ public class UI_Manager : MonoBehaviour
                 }
                 else
                 {
-                    spell_Cast.FindSpell(spell_ID, spell_Direction);
+                    spell_Cast.FindSpell(spell_ID, spell_Direction, mouseLocation);
                     counter = 0;
                     break;
                 }
@@ -175,7 +176,7 @@ public class UI_Manager : MonoBehaviour
                 }
                 else
                 {
-                    spell_Cast.FindSpell(spell_ID, spell_Direction);
+                    spell_Cast.FindSpell(spell_ID, spell_Direction, mouseLocation);
                     counter = 0;
                     break;
                 }
@@ -194,7 +195,7 @@ public class UI_Manager : MonoBehaviour
                 }
                 else
                 {
-                    spell_Cast.FindSpell(spell_ID, spell_Direction);
+                    spell_Cast.FindSpell(spell_ID, spell_Direction, mouseLocation);
                     counter = 0;
                     break;
                 }

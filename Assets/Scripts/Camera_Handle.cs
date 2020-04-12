@@ -9,7 +9,7 @@ public class Camera_Handle : MonoBehaviour
     [SerializeField]
     Vector3 offSet;
 
-    void Update()
+    void LateUpdate()
     {
         transform.position = player.position + offSet;
     }
