@@ -54,27 +54,27 @@ public class Player_Movement : MonoBehaviour
     */
     void Cast_Spell_1()
     {
-        UI.Parse_Spell_Sequence("3,3", "S_DeathRay", shootDirection, hit.point); // SpellChantSequence, Name Of Spell, Direction
+        UI.Parse_Spell_Sequence("3,3", "S_DeathRay", shootDirection, hit.point, 60, 100); // SpellChantSequence, Name Of Spell, Direction, ManaCost, Damage
     }
 
     void Cast_Spell_2()
     {
-        UI.Parse_Spell_Sequence("4,4,0", "S_Fireball", shootDirection, hit.point);
+        UI.Parse_Spell_Sequence("4,4,0", "S_Fireball", shootDirection, hit.point, 40, 127);
     }
 
     void Cast_Spell_3()
     {
-        UI.Parse_Spell_Sequence("0,7,4,1", "S_DrainMana", shootDirection, hit.point);
+        UI.Parse_Spell_Sequence("0,7,4,1", "S_DrainMana", shootDirection, hit.point, 0, 0);
     }
 
     void Cast_Spell_4()
     {
-        UI.Parse_Spell_Sequence("4,0,6,2", "S_TeleportToTarget", shootDirection, hit.point);
+        UI.Parse_Spell_Sequence("4,0,6,2", "S_TeleportToTarget", shootDirection, hit.point, 20, 0);
     }
 
     void Cast_Spell_5()
     {
-        UI.Parse_Spell_Sequence("2,6,0", "S_Blink", shootDirection, hit.point);
+        UI.Parse_Spell_Sequence("2,6,0", "S_Blink", shootDirection, hit.point, 10, 0);
     }
 
     private void Update()

@@ -12,6 +12,7 @@ public class UI_Manager : MonoBehaviour
     string[] spell_Chant_Sequence;
     int[] testing;
     int counter = 0;
+    float manaCost, damageDealt;
     AudioSource audio_Source;
     string spell_ID;
     Vector3 spell_Direction, mouseLocation;
@@ -21,7 +22,8 @@ public class UI_Manager : MonoBehaviour
         audio_Source = GetComponent<AudioSource>();
     }
     // Take NumericalSpellChantSequence i.e. "0,1,1", Spell Name, Direction Of Caster Is Facing
-    public void Parse_Spell_Sequence(string gestureSequence, string spell_ID_Import, Vector3 spell_Direction_Import, Vector3 mouseLocation_Import)
+    public void Parse_Spell_Sequence(string gestureSequence, string spell_ID_Import, Vector3 spell_Direction_Import, Vector3 mouseLocation_Import,
+        float manaCost_Import, float damageDealt_Import)
     {
         spell_Chant_Sequence = gestureSequence.Split(','); // Split NumSpellChant into individual chars
         testing = new int[spell_Chant_Sequence.Length];
@@ -29,9 +31,7 @@ public class UI_Manager : MonoBehaviour
         {
             testing[i] = int.Parse(spell_Chant_Sequence[i]);
         }
-        spell_ID = spell_ID_Import;
-        spell_Direction = spell_Direction_Import;
-        mouseLocation = new Vector3(mouseLocation_Import.x, mouseLocation_Import.y + 8.1f, mouseLocation_Import.z);
+        PassValues(gestureSequence, spell_ID_Import, spell_Direction_Import, mouseLocation_Import, manaCost_Import, damageDealt_Import);
         StartCoroutine(MagicGestures(testing[0]));
     }
 
@@ -62,7 +62,7 @@ public class UI_Manager : MonoBehaviour
                 }
                 else
                 {
-                    spell_Cast.FindSpell(spell_ID, spell_Direction, mouseLocation);
+                    spell_Cast.FindSpell(spell_ID, spell_Direction, mouseLocation, manaCost, damageDealt);
                     counter = 0;
                     break;
                 }
@@ -81,7 +81,7 @@ public class UI_Manager : MonoBehaviour
                 }
                 else
                 {
-                    spell_Cast.FindSpell(spell_ID, spell_Direction, mouseLocation);
+                    spell_Cast.FindSpell(spell_ID, spell_Direction, mouseLocation, manaCost, damageDealt);
                     counter = 0;
                     break;
                 }
@@ -100,7 +100,7 @@ public class UI_Manager : MonoBehaviour
                 }
                 else
                 {
-                    spell_Cast.FindSpell(spell_ID, spell_Direction, mouseLocation);
+                    spell_Cast.FindSpell(spell_ID, spell_Direction, mouseLocation, manaCost, damageDealt);
                     counter = 0;
                     break;
                 }
@@ -119,7 +119,7 @@ public class UI_Manager : MonoBehaviour
                 }
                 else
                 {
-                    spell_Cast.FindSpell(spell_ID, spell_Direction, mouseLocation);
+                    spell_Cast.FindSpell(spell_ID, spell_Direction, mouseLocation, manaCost, damageDealt);
                     counter = 0;
                     break;
                 }
@@ -138,7 +138,7 @@ public class UI_Manager : MonoBehaviour
                 }
                 else
                 {
-                    spell_Cast.FindSpell(spell_ID, spell_Direction, mouseLocation);
+                    spell_Cast.FindSpell(spell_ID, spell_Direction, mouseLocation, manaCost, damageDealt);
                     counter = 0;
                     break;
                 }
@@ -157,7 +157,7 @@ public class UI_Manager : MonoBehaviour
                 }
                 else
                 {
-                    spell_Cast.FindSpell(spell_ID, spell_Direction, mouseLocation);
+                    spell_Cast.FindSpell(spell_ID, spell_Direction, mouseLocation, manaCost, damageDealt);
                     counter = 0;
                     break;
                 }
@@ -176,7 +176,7 @@ public class UI_Manager : MonoBehaviour
                 }
                 else
                 {
-                    spell_Cast.FindSpell(spell_ID, spell_Direction, mouseLocation);
+                    spell_Cast.FindSpell(spell_ID, spell_Direction, mouseLocation, manaCost, damageDealt);
                     counter = 0;
                     break;
                 }
@@ -195,11 +195,22 @@ public class UI_Manager : MonoBehaviour
                 }
                 else
                 {
-                    spell_Cast.FindSpell(spell_ID, spell_Direction, mouseLocation);
+                    spell_Cast.FindSpell(spell_ID, spell_Direction, mouseLocation, manaCost, damageDealt);
                     counter = 0;
                     break;
                 }
                 break;
         }
     }
+
+    void PassValues(string gestureSequence, string spell_ID_Import, Vector3 spell_Direction_Import, Vector3 mouseLocation_Import,
+        float manaCost_Import, float damageDealt_Import)
+    {
+        spell_ID = spell_ID_Import;
+        spell_Direction = spell_Direction_Import;
+        manaCost = manaCost_Import;
+        damageDealt = damageDealt_Import;
+        mouseLocation = new Vector3(mouseLocation_Import.x, mouseLocation_Import.y + 8.1f, mouseLocation_Import.z);
+    }
+
 }

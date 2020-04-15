@@ -65,7 +65,9 @@
     <Compile Include="Assets\Scripts\Camera_Handle.cs" />
     <Compile Include="Assets\Scripts\Destroy_Particle.cs" />
     <Compile Include="Assets\Scripts\Game_Manager.cs" />
+    <Compile Include="Assets\Scripts\HP_Mana.cs" />
     <Compile Include="Assets\Scripts\Mana_Drain_Particles.cs" />
+    <Compile Include="Assets\Scripts\Object_Pooler.cs" />
     <Compile Include="Assets\Scripts\ObjectDestroy.cs" />
     <Compile Include="Assets\Scripts\Player_Movement.cs" />
     <Compile Include="Assets\Scripts\Projectile.cs" />
