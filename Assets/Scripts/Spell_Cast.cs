@@ -7,17 +7,19 @@ public class Spell_Cast : MonoBehaviour
     Dictionary<string,Spell_Methods> hash_Browns = new Dictionary<string, Spell_Methods>();
     List<GameObject> teleportToLocParticlesList = new List<GameObject>();
     List<GameObject> teleportSmokeParticlesList = new List<GameObject>();
+    List<GameObject> particles_DeathRayList = new List<GameObject>();
     List<int> usedValues = new List<int>();
-    HP_Mana hp_Mana_System;
     delegate void Spell_Methods(string spell_ID, Vector3 spell_Direction, Vector3 mouseLocation, float manaCost, float damageDealt);
-    [SerializeField] Game_Manager audio_Manager;
-    [SerializeField] GameObject particles_DeathRay, particles_FireBall, particles_TeleportToLoc, particle_TeleportSmoke;
+    [SerializeField] GameObject particles_DeathRay, particles_FireBall, particles_TeleportToLoc, particle_TeleportSmoke, particles_FistOfVengeance;
     [SerializeField] Transform hands;
     [SerializeField] Transform[] blink_Safe_Spot;
     [SerializeField] List<Mana_Drain_Particles> mana_Pillar_List = new List<Mana_Drain_Particles>();
     [SerializeField] int TotalAmountOfSpellsAllowed = 5;
+    AudioSource audioSource;
     Mana_Drain_Particles mana_Drain_Object;
-    GameObject deathRay, fireball;
+    HP_Mana hp_Mana_System;
+    FistOfVengeance fistOfVengeanceScript;
+    GameObject fireball;
 
     private void Start()
     {
@@ -27,14 +29,32 @@ public class Spell_Cast : MonoBehaviour
         hash_Browns.Add("S_DrainMana", S_ManaDrain);
         hash_Browns.Add("S_TeleportToTarget", S_TeleportToTarget);
         hash_Browns.Add("S_Blink", S_Blink);
+        hash_Browns.Add("S_FistOfVengeance", S_FistOfVengeance);
+        audioSource = GetComponent<AudioSource>();
+        GameObject fistOfVengenaceObj = (GameObject)Instantiate(particles_FistOfVengeance);
+        fistOfVengeanceScript = fistOfVengenaceObj.GetComponent<FistOfVengeance>();
+        fistOfVengenaceObj.SetActive(false);
+
         for (int i = 0; i < TotalAmountOfSpellsAllowed; i++)
         {
             GameObject telepotToLocObj = (GameObject)Instantiate(particles_TeleportToLoc);
             GameObject teleportSmokeObj = (GameObject)Instantiate(particle_TeleportSmoke);
+
             telepotToLocObj.SetActive(false);
             teleportSmokeObj.SetActive(false);
+
             teleportToLocParticlesList.Add(telepotToLocObj);
             teleportSmokeParticlesList.Add(teleportSmokeObj);
+
+            if (i == TotalAmountOfSpellsAllowed - 1)
+            {
+                for (int j = 0; j < TotalAmountOfSpellsAllowed + 5; j++)
+                {
+                    GameObject particles_DeathRayObj = (GameObject)Instantiate(particles_DeathRay);
+                    particles_DeathRayObj.SetActive(false);
+                    particles_DeathRayList.Add(particles_DeathRayObj);
+                }
+            }
         }
     }
 
@@ -54,17 +74,6 @@ public class Spell_Cast : MonoBehaviour
     GameObject GetPooledObject(List<GameObject> object_Pool_List)
     { 
         return Object_Pooler.GetPooledObject(object_Pool_List);
-        /*
-        for (int i = 0; i < teleportToLocParticlesList.Count; i++)
-        {
-            if (!teleportToLocParticlesList[i].activeInHierarchy)
-            {
-                return teleportToLocParticlesList[i];
-            }
-        }
-
-        return null;
-        */
     }
 
     // Take In Spell_ID from UI_Manager, Find Method Of That Spell_ID -> Cast That Spell
@@ -80,19 +89,29 @@ public class Spell_Cast : MonoBehaviour
 
     private void S_DeathRay(string spell_ID, Vector3 spell_Direction, Vector3 mouseLocation, float manaCost, float damageDealt)
     {
-        audio_Manager.PlaySound(0);
-        for (int i = 0; i < 10; i++)
+        if (hp_Mana_System.Mana_Cost(manaCost))
         {
-            deathRay = Instantiate(particles_DeathRay, hands.position + Vector3.up, Quaternion.identity);
-            deathRay.transform.position = deathRay.transform.position + spell_Direction * i / 10;
+            audioSource.clip = Game_Manager.Get().audioArray[0];
+            audioSource.Play();
+            for (int i = 0; i < 10; i++)
+            {
+                particles_DeathRay = GetPooledObject(particles_DeathRayList);
+                particles_DeathRayList[i].transform.position = hands.transform.position + spell_Direction * i / 10;
+                particles_DeathRayList[i].SetActive(true);
+            }
         }
-        hp_Mana_System.Mana_Cost(manaCost);
+        else
+            print("NOT ENOUGH MANA");
     }
 
     private void S_FireBall(string spell_ID, Vector3 spell_Direction, Vector3 mouseLocation, float manaCost, float damageDealt)
     {
-        fireball = Instantiate(particles_FireBall, hands.position + Vector3.up, Quaternion.LookRotation(transform.forward));
-        hp_Mana_System.Mana_Cost(manaCost);
+        if (hp_Mana_System.Mana_Cost(manaCost))
+        {
+            fireball = Instantiate(particles_FireBall, hands.position + Vector3.up, Quaternion.LookRotation(transform.forward));
+        }
+        else
+            print("NOT ENOUGH MANA");
     }
 
     private void S_ManaDrain(string spell_ID, Vector3 spell_Direction, Vector3 mouseLocation, float manaCost, float damageDealt)
@@ -101,35 +120,52 @@ public class Spell_Cast : MonoBehaviour
         {
             mana_Drain_Object.Drain_Dat_Mana_Son();
         }
-        hp_Mana_System.Mana_Cost(manaCost);
     }
 
     private void S_TeleportToTarget(string spell_ID, Vector3 spell_Direction, Vector3 mouseLocation, float manaCost, float damageDealt)
     {
         if (particles_TeleportToLoc != null)
         {
-            particles_TeleportToLoc = GetPooledObject(teleportToLocParticlesList);
-            particle_TeleportSmoke = GetPooledObject(teleportSmokeParticlesList);
-            particles_TeleportToLoc.transform.position = transform.position;
-            particle_TeleportSmoke.transform.position = mouseLocation;
-            particles_TeleportToLoc.SetActive(true);
-            particle_TeleportSmoke.SetActive(true);
-            transform.position = mouseLocation;
-            hp_Mana_System.Mana_Cost(manaCost);
+            if (hp_Mana_System.Mana_Cost(manaCost))
+            {
+                particles_TeleportToLoc = GetPooledObject(teleportToLocParticlesList);
+                particle_TeleportSmoke = GetPooledObject(teleportSmokeParticlesList);
+                particles_TeleportToLoc.transform.position = transform.position;
+                particle_TeleportSmoke.transform.position = mouseLocation;
+                particles_TeleportToLoc.SetActive(true);
+                particle_TeleportSmoke.SetActive(true);
+                transform.position = mouseLocation;
+            }
+            else
+                print("NOT ENOUGH MANA");
         }
     }
 
     private void S_Blink(string spell_ID, Vector3 spell_Direction, Vector3 mouseLocation, float manaCost, float damageDealt)
     {
-        usedValues.Add(RandomPositions(0, 4));
-        particles_TeleportToLoc = GetPooledObject(teleportToLocParticlesList);
-        particle_TeleportSmoke = GetPooledObject(teleportSmokeParticlesList);
-        particles_TeleportToLoc.transform.position = transform.position;
-        particle_TeleportSmoke.transform.position = blink_Safe_Spot[usedValues[0]].position;
-        particles_TeleportToLoc.SetActive(true);
-        particle_TeleportSmoke.SetActive(true);
-        transform.position = blink_Safe_Spot[usedValues[0]].position;
-        hp_Mana_System.Mana_Cost(manaCost);
+        if (hp_Mana_System.Mana_Cost(manaCost))
+        {
+            usedValues.Add(RandomPositions(0, 4));
+            particles_TeleportToLoc = GetPooledObject(teleportToLocParticlesList);
+            particle_TeleportSmoke = GetPooledObject(teleportSmokeParticlesList);
+            particles_TeleportToLoc.transform.position = transform.position;
+            particle_TeleportSmoke.transform.position = blink_Safe_Spot[usedValues[0]].position;
+            particles_TeleportToLoc.SetActive(true);
+            particle_TeleportSmoke.SetActive(true);
+            transform.position = blink_Safe_Spot[usedValues[0]].position;
+        }
+        else
+            print("NOT ENOUGH MANA");
+    }
+
+    private void S_FistOfVengeance(string spell_ID, Vector3 spell_Direction, Vector3 mouseLocation, float manaCost, float damageDealt)
+    {
+        if (hp_Mana_System.Mana_Cost(manaCost))
+        {
+            fistOfVengeanceScript.Get_Fisted(mouseLocation);
+        }
+        else
+            print("NOT ENOUGH MANA");
     }
 
     int RandomPositions(int min, int max)
@@ -144,11 +180,5 @@ public class Spell_Cast : MonoBehaviour
             usedValues.RemoveAt(0);
         }
         return val;
-    }
-
-    private void OnDrawGizmos()
-    {
-        //Gizmos.color = Color.red;
-        //Gizmos.DrawRay(manaDrainPillarClosest.transform.position, manaDrainDirection);
     }
 }

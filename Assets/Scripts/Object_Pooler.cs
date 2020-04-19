@@ -13,7 +13,6 @@ public class Object_Pooler : MonoBehaviour
                 return objectInList[i];
             }
         }
-
         return null;
     }
 }

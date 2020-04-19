@@ -4819,7 +4819,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 537221513743156926}
-  - component: {fileID: 3669767506042833104}
+  - component: {fileID: 2368719167556033612}
   m_Layer: 0
   m_Name: Death_Ray
   m_TagString: Untagged
@@ -4843,7 +4843,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3669767506042833104
+--- !u!114 &2368719167556033612
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4852,7 +4852,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 537221513743156925}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ce3e001950e9ab045a7ae8520e7397be, type: 3}
+  m_Script: {fileID: 11500000, guid: 6a359aa468f3d804395d019391f1e041, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &537221514054317844

@@ -5,10 +5,11 @@ using UnityEngine.AI;
 
 public class Player_Movement : MonoBehaviour
 {
-    [SerializeField] GameObject deathRayParticles;
-    [SerializeField] Transform hands;
-    [SerializeField] UI_Manager UI;
-    GameObject deathRay, fireball;
+    [SerializeField] private GameObject deathRayParticles;
+    [SerializeField] private Transform hands;
+    [SerializeField] private UI_Manager UI;
+    [SerializeField] private ItemSlot[] itemSlot_ActionBar;
+    GameObject[] actionBarSpell;
     Animator anim;
     CharacterController player;
     Camera cam;
@@ -16,14 +17,21 @@ public class Player_Movement : MonoBehaviour
     Ray ray;
     RaycastHit hit;
     Vector3 direction, targetDirection, newDirection, shootDirection;
-    public float speed;
     float singleStep;
+    public float speed;
 
     private void Start()
     {
         player = GetComponent<CharacterController>();
         cam = Camera.main;
         anim = GetComponent<Animator>();
+        for (int i = 0; i < itemSlot_ActionBar.Length; i++)
+        {
+            if (itemSlot_ActionBar[i] != null)
+                return;
+            else
+                itemSlot_ActionBar[i] = actionBarSpell[i].GetComponent<ItemSlot>();
+        }
     }
 
     void MoveToPoint(Vector3 point)
@@ -42,8 +50,9 @@ public class Player_Movement : MonoBehaviour
 
         player.Move(direction);
     }
-    /* Need Actionbar
-    * UN 0 North
+    #region
+
+    /* UN 0 North
     * IN 1 NorthEast
     * CHA 2 East
     * DO 3 SouthEast
@@ -52,35 +61,36 @@ public class Player_Movement : MonoBehaviour
     * ET 6 West
     * KA 7 NorthWest
     */
+
     void Cast_Spell_1()
     {
-        UI.Parse_Spell_Sequence("3,3", "S_DeathRay", shootDirection, hit.point, 60, 100); // SpellChantSequence, Name Of Spell, Direction, ManaCost, Damage
+        UI.Parse_Spell_Sequence(itemSlot_ActionBar[0].Spell_Return(), shootDirection, hit.point, 60, 100); // SpellChantSequence, Name Of Spell, Direction, ManaCost, Damage
     }
 
     void Cast_Spell_2()
     {
-        UI.Parse_Spell_Sequence("4,4,0", "S_Fireball", shootDirection, hit.point, 40, 127);
+        UI.Parse_Spell_Sequence(itemSlot_ActionBar[1].Spell_Return(), shootDirection, hit.point, 40, 127);
     }
 
     void Cast_Spell_3()
     {
-        UI.Parse_Spell_Sequence("0,7,4,1", "S_DrainMana", shootDirection, hit.point, 0, 0);
+        UI.Parse_Spell_Sequence(itemSlot_ActionBar[2].Spell_Return(), shootDirection, hit.point, 0, 0);
     }
 
     void Cast_Spell_4()
     {
-        UI.Parse_Spell_Sequence("4,0,6,2", "S_TeleportToTarget", shootDirection, hit.point, 20, 0);
+        UI.Parse_Spell_Sequence(itemSlot_ActionBar[3].Spell_Return(), shootDirection, hit.point, 20, 0);
     }
 
     void Cast_Spell_5()
     {
-        UI.Parse_Spell_Sequence("2,6,0", "S_Blink", shootDirection, hit.point, 10, 0);
+        UI.Parse_Spell_Sequence(itemSlot_ActionBar[4].Spell_Return(), shootDirection, hit.point, 20, 0);
     }
 
     private void Update()
     {
         shootDirection = new Vector3(hit.point.x - transform.position.x, 0, hit.point.z - transform.position.z);
-        if (Input.GetMouseButton(0))
+        if (Input.GetMouseButton(1))
         {
             ray = cam.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out hit))
@@ -134,4 +144,5 @@ public class Player_Movement : MonoBehaviour
         Gizmos.color = Color.green;
         Gizmos.DrawLine(transform.position, hit.point);
     }
+    #endregion
 }

@@ -5,9 +5,8 @@ using UnityEngine.UI;
 
 public class HP_Mana : MonoBehaviour
 {
-    [SerializeField]Image[] Health_Bar, Mana_Bar;
-    float Health = 100, Mana = 150, currentHealth, currentMana;//, calculateHealth, calculateMana;
-    int valueOfMana = 10;
+    [SerializeField]Image Health_Bar, Mana_Bar;
+    float Health = 100, Mana = 150, currentHealth, currentMana, calculateHealth, calculateMana;
 
     private void Start()
     {
@@ -17,23 +16,33 @@ public class HP_Mana : MonoBehaviour
 
     private void Update()
     {
-        for (int i = 0; i < Mana_Bar.Length; i++)
-        {
-            if (currentMana % 10 == 0)
-            {
-
-            }
-        }
-        //calculateHealth = currentHealth / Health;
-        //calculateMana = currentMana / Mana;
-        //Health_Bar.fillAmount = Mathf.MoveTowards(Health_Bar.fillAmount, calculateHealth, Time.deltaTime);
-        //Mana_Bar.fillAmount = Mathf.MoveTowards(Mana_Bar.fillAmount, calculateMana, Time.deltaTime);
+        calculateHealth = currentHealth / Health;
+        calculateMana = currentMana / Mana;
+        Health_Bar.fillAmount = Mathf.MoveTowards(Health_Bar.fillAmount, calculateHealth, Time.deltaTime);
+        Mana_Bar.fillAmount = Mathf.MoveTowards(Mana_Bar.fillAmount, calculateMana, Time.deltaTime);
     }
 
-    public void Mana_Cost(float mana_Cost)
+    public bool Mana_Cost(float mana_Cost)
     {
-        currentMana = currentMana - mana_Cost;
-        //Mana_Bar.fillAmount = Mana_Bar.fillAmount - mana_Cost/1000f;
+        if (currentMana - mana_Cost < 0)
+        {
+            return false;
+        }
+        else
+        {
+            currentMana = currentMana - mana_Cost;
+            return true;
+        }
+            
+    }
+
+    public void Blue_Koolaid()
+    {
+        currentMana += 40;
+        if (currentMana > 150)
+        {
+            currentMana = 150;
+        }
     }
 
     public void Damage(float damage)

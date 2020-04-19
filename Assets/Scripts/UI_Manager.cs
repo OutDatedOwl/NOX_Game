@@ -1,16 +1,17 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class UI_Manager : MonoBehaviour
 {
-    [SerializeField] float gestureTimeElapse = 0.05f;
-    [SerializeField] Image[] direction_Gestures;
-    [SerializeField] AudioClip[] audio_Clip;
-    [SerializeField] Spell_Cast spell_Cast;
-    string[] spell_Chant_Sequence;
-    int[] testing;
+    [SerializeField] private float gestureTimeElapse = 0.05f;
+    [SerializeField] private Image[] direction_Gestures;
+    [SerializeField] private AudioClip[] audio_Clip;
+    [SerializeField] private Spell_Cast spell_Cast;
+    string[] spell_Chant_Sequence, spell_ID_spell_Gesture_Split;
+    int[] gestureSequenceArray;
     int counter = 0;
     float manaCost, damageDealt;
     AudioSource audio_Source;
@@ -22,17 +23,26 @@ public class UI_Manager : MonoBehaviour
         audio_Source = GetComponent<AudioSource>();
     }
     // Take NumericalSpellChantSequence i.e. "0,1,1", Spell Name, Direction Of Caster Is Facing
-    public void Parse_Spell_Sequence(string gestureSequence, string spell_ID_Import, Vector3 spell_Direction_Import, Vector3 mouseLocation_Import,
+    public void Parse_Spell_Sequence(string spell_ID_spell_Gestures, Vector3 spell_Direction_Import, Vector3 mouseLocation_Import,
         float manaCost_Import, float damageDealt_Import)
     {
-        spell_Chant_Sequence = gestureSequence.Split(','); // Split NumSpellChant into individual chars
-        testing = new int[spell_Chant_Sequence.Length];
-        for (int i = 0; i < spell_Chant_Sequence.Length; i++)
+        try // Try to parse string from Spell in actionbar
         {
-            testing[i] = int.Parse(spell_Chant_Sequence[i]);
+            spell_ID_spell_Gesture_Split = spell_ID_spell_Gestures.Split('/'); // Split spellName first then spellChantSequence second
+            spell_ID = spell_ID_spell_Gesture_Split[0];
+            spell_Chant_Sequence = spell_ID_spell_Gesture_Split[1].Split(','); // Split NumSpellChant into individual chars
+            gestureSequenceArray = new int[spell_Chant_Sequence.Length];
+            for (int i = 0; i < spell_Chant_Sequence.Length; i++)
+            {
+                gestureSequenceArray[i] = int.Parse(spell_Chant_Sequence[i]);
+            }
+            PassValues(spell_ID, spell_Direction_Import, mouseLocation_Import, manaCost_Import, damageDealt_Import);
+            StartCoroutine(MagicGestures(gestureSequenceArray[0]));
         }
-        PassValues(gestureSequence, spell_ID_Import, spell_Direction_Import, mouseLocation_Import, manaCost_Import, damageDealt_Import);
-        StartCoroutine(MagicGestures(testing[0]));
+        catch (Exception no_Spell)
+        {
+            return;
+        }
     }
 
     IEnumerator MagicGestures(int gestureSequence) // Play Sound, Image of that char
@@ -55,10 +65,10 @@ public class UI_Manager : MonoBehaviour
                 yield return new WaitForSeconds(gestureTimeElapse);
                 direction_Gestures[0].color = new Color(direction_Gestures[0].color.r, direction_Gestures[0].color.g, direction_Gestures[0].color.b, 0);
                 yield return new WaitForSeconds(gestureTimeElapse);
-                if (counter < testing.Length - 1)
+                if (counter < gestureSequenceArray.Length - 1)
                 {
                     counter++;
-                    StartCoroutine(MagicGestures(testing[counter]));
+                    StartCoroutine(MagicGestures(gestureSequenceArray[counter]));
                 }
                 else
                 {
@@ -74,10 +84,10 @@ public class UI_Manager : MonoBehaviour
                 yield return new WaitForSeconds(gestureTimeElapse);
                 direction_Gestures[1].color = new Color(direction_Gestures[1].color.r, direction_Gestures[1].color.g, direction_Gestures[1].color.b, 0);
                 yield return new WaitForSeconds(gestureTimeElapse);
-                if (counter < testing.Length - 1)
+                if (counter < gestureSequenceArray.Length - 1)
                 {
                     counter++;
-                    StartCoroutine(MagicGestures(testing[counter]));
+                    StartCoroutine(MagicGestures(gestureSequenceArray[counter]));
                 }
                 else
                 {
@@ -93,10 +103,10 @@ public class UI_Manager : MonoBehaviour
                 yield return new WaitForSeconds(gestureTimeElapse);
                 direction_Gestures[2].color = new Color(direction_Gestures[2].color.r, direction_Gestures[2].color.g, direction_Gestures[2].color.b, 0);
                 yield return new WaitForSeconds(gestureTimeElapse);
-                if (counter < testing.Length - 1)
+                if (counter < gestureSequenceArray.Length - 1)
                 {
                     counter++;
-                    StartCoroutine(MagicGestures(testing[counter]));
+                    StartCoroutine(MagicGestures(gestureSequenceArray[counter]));
                 }
                 else
                 {
@@ -112,10 +122,10 @@ public class UI_Manager : MonoBehaviour
                 yield return new WaitForSeconds(gestureTimeElapse);
                 direction_Gestures[3].color = new Color(direction_Gestures[3].color.r, direction_Gestures[3].color.g, direction_Gestures[3].color.b, 0);
                 yield return new WaitForSeconds(gestureTimeElapse);
-                if (counter < testing.Length - 1)
+                if (counter < gestureSequenceArray.Length - 1)
                 {
                     counter++;
-                    StartCoroutine(MagicGestures(testing[counter]));
+                    StartCoroutine(MagicGestures(gestureSequenceArray[counter]));
                 }
                 else
                 {
@@ -131,10 +141,10 @@ public class UI_Manager : MonoBehaviour
                 yield return new WaitForSeconds(gestureTimeElapse);
                 direction_Gestures[4].color = new Color(direction_Gestures[4].color.r, direction_Gestures[4].color.g, direction_Gestures[4].color.b, 0);
                 yield return new WaitForSeconds(gestureTimeElapse);
-                if (counter < testing.Length - 1)
+                if (counter < gestureSequenceArray.Length - 1)
                 {
                     counter++;
-                    StartCoroutine(MagicGestures(testing[counter]));
+                    StartCoroutine(MagicGestures(gestureSequenceArray[counter]));
                 }
                 else
                 {
@@ -150,10 +160,10 @@ public class UI_Manager : MonoBehaviour
                 yield return new WaitForSeconds(gestureTimeElapse);
                 direction_Gestures[5].color = new Color(direction_Gestures[5].color.r, direction_Gestures[5].color.g, direction_Gestures[5].color.b, 0);
                 yield return new WaitForSeconds(gestureTimeElapse);
-                if (counter < testing.Length - 1)
+                if (counter < gestureSequenceArray.Length - 1)
                 {
                     counter++;
-                    StartCoroutine(MagicGestures(testing[counter]));
+                    StartCoroutine(MagicGestures(gestureSequenceArray[counter]));
                 }
                 else
                 {
@@ -169,10 +179,10 @@ public class UI_Manager : MonoBehaviour
                 yield return new WaitForSeconds(gestureTimeElapse);
                 direction_Gestures[6].color = new Color(direction_Gestures[6].color.r, direction_Gestures[6].color.g, direction_Gestures[6].color.b, 0);
                 yield return new WaitForSeconds(gestureTimeElapse);
-                if (counter < testing.Length - 1)
+                if (counter < gestureSequenceArray.Length - 1)
                 {
                     counter++;
-                    StartCoroutine(MagicGestures(testing[counter]));
+                    StartCoroutine(MagicGestures(gestureSequenceArray[counter]));
                 }
                 else
                 {
@@ -188,10 +198,10 @@ public class UI_Manager : MonoBehaviour
                 yield return new WaitForSeconds(gestureTimeElapse);
                 direction_Gestures[7].color = new Color(direction_Gestures[7].color.r, direction_Gestures[7].color.g, direction_Gestures[7].color.b, 0);
                 yield return new WaitForSeconds(gestureTimeElapse);
-                if (counter < testing.Length - 1)
+                if (counter < gestureSequenceArray.Length - 1)
                 {
                     counter++;
-                    StartCoroutine(MagicGestures(testing[counter]));
+                    StartCoroutine(MagicGestures(gestureSequenceArray[counter]));
                 }
                 else
                 {
@@ -203,10 +213,11 @@ public class UI_Manager : MonoBehaviour
         }
     }
 
-    void PassValues(string gestureSequence, string spell_ID_Import, Vector3 spell_Direction_Import, Vector3 mouseLocation_Import,
+    void PassValues(string spell_ID, Vector3 spell_Direction_Import, Vector3 mouseLocation_Import,
         float manaCost_Import, float damageDealt_Import)
     {
-        spell_ID = spell_ID_Import;
+        if (spell_ID == null)
+            spell_ID = " ";
         spell_Direction = spell_Direction_Import;
         manaCost = manaCost_Import;
         damageDealt = damageDealt_Import;

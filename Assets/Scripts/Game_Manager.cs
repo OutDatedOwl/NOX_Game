@@ -4,17 +4,12 @@ using UnityEngine;
 
 public class Game_Manager : MonoBehaviour
 {
-    [SerializeField] AudioClip[] audioArray;
-    public List<AudioSource> audioSourceList;
-
-    public void PlaySound(int spell_Number)
+    private static Game_Manager _instance = null;
+    public static Game_Manager Get()
     {
-        switch (spell_Number)
-        {
-            case 0:
-                audioSourceList[0].clip = audioArray[0];
-                audioSourceList[0].Play();
-                break;
-        }
+        if (_instance == null)
+            _instance = (Game_Manager)FindObjectOfType(typeof(Game_Manager));
+        return _instance;
     }
+    public AudioClip[] audioArray;
 }

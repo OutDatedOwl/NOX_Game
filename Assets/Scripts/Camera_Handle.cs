@@ -5,9 +5,9 @@ using UnityEngine;
 public class Camera_Handle : MonoBehaviour
 {
     [SerializeField]
-    Transform player;
+    private Transform player;
     [SerializeField]
-    Vector3 offSet;
+    private Vector3 offSet;
 
     void LateUpdate()
     {
