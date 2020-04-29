@@ -1,40 +1,46 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
-public class DragDrop : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IEndDragHandler, IDragHandler
+public class DragDrop : MonoBehaviour, IPointerDownHandler, IEndDragHandler, IDragHandler
 {
     [SerializeField] private Canvas canvas;
-    private RectTransform rectTransform;
-    private CanvasGroup canvasGroup;
+    [SerializeField] public GameObject spell_Block_Sprite;
+    [HideInInspector] public RectTransform rectTransform;
+    [HideInInspector] public CanvasGroup canvasGroup;
+    [HideInInspector] public Image image_Color;
+    AudioSource audioSource;
 
     private void Awake()
     {
-        rectTransform = GetComponent<RectTransform>();
-        canvasGroup = GetComponent<CanvasGroup>();
+        rectTransform = spell_Block_Sprite.GetComponent<RectTransform>();
+        canvasGroup = spell_Block_Sprite.GetComponent<CanvasGroup>();
+        audioSource = spell_Block_Sprite.GetComponentInParent<AudioSource>();
+        image_Color = spell_Block_Sprite.GetComponent<Image>();
     }
 
-    public void OnBeginDrag(PointerEventData eventData)
+    public void OnPointerDown(PointerEventData eventData)
     {
-        //Debug.Log("OnBeginDrag");
+        spell_Block_Sprite.SetActive(true);
+        spell_Block_Sprite.transform.position = eventData.position;
+        //image_Color.color = new Color(image_Color.color.r, image_Color.color.g, image_Color.color.b, 1);
+        PullSpellSound();
         canvasGroup.blocksRaycasts = false;
     }
 
     public void OnDrag(PointerEventData eventData)
     {
-        //Debug.Log("OnDrag");
         rectTransform.anchoredPosition += eventData.delta / canvas.scaleFactor;
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        //Debug.Log("OnEndDrag");
         canvasGroup.blocksRaycasts = true;
     }
 
-    public void OnPointerDown(PointerEventData eventData)
+    private void PullSpellSound()
     {
-        //Debug.Log("OnPointerDown");
+        audioSource.clip = Game_Manager.Get().audioArray[5];
+        audioSource.Play();
     }
 }

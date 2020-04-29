@@ -12,4 +12,12 @@ public class Game_Manager : MonoBehaviour
         return _instance;
     }
     public AudioClip[] audioArray;
+    // DeathRay 0
+    // ManaDrain 1
+    // Charge 2
+    // StunOn 3
+    // StunOff 4
+    // SpellDrag 5
+    // SpellPull 6
+    // NotEnoughMana 7
 }

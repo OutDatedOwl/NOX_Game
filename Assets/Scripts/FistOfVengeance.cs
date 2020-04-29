@@ -5,6 +5,7 @@ using UnityEngine;
 public class FistOfVengeance : MonoBehaviour
 {
     Vector3 startPoint, endPoint;
+    HP_Mana kill_You_Dead;
     [SerializeField] private float speed;
     RaycastHit hit;
     LayerMask floor;
@@ -49,5 +50,14 @@ public class FistOfVengeance : MonoBehaviour
     {
         Gizmos.color = Color.red;
         Gizmos.DrawRay(transform.position, Vector3.down * 20);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.transform.tag == "Player")
+        {
+            kill_You_Dead = other.GetComponent<HP_Mana>();
+            kill_You_Dead.Damage(100f);
+        }
     }
 }
